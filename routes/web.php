@@ -37,18 +37,12 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.for
 // Handle login request
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
-// Handle logout request
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
-Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
-Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
-Route::get('/properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
-Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/admin-dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::controller(DashboardController::class)->group(function(){
+        Route::get('/admin-dashboard', 'index')->name('admin.dashboard');
+    });
 
     Route::get('/bidder-dashboard', function () {
         return view('bidder.dashboard');
@@ -57,5 +51,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/owner-dashboard', function () {
         return view('property_owner.dashboard');
     })->name('owner.dashboard');
+
+    Route::controller(PropertyController::class)->group(function(){
+        Route::get('/properties', 'index')->name('properties.index');
+        Route::get('/properties/create', 'create')->name('properties.create');
+        Route::get('/properties/{id}', 'show')->name('properties.show');
+        Route::post('/properties', 'store')->name('properties.store');
+    });
 });
+
+// Handle logout request
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 

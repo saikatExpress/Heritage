@@ -28,6 +28,7 @@ class PropertyController extends Controller
             ->when($bedrooms, function ($query, $bedrooms) {
                 return $query->where('bedrooms', $bedrooms);
             })
+            ->where('owner_id', auth()->user()->id)
             ->get();
 
         // Return view with properties
@@ -45,6 +46,10 @@ class PropertyController extends Controller
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
             'bedrooms'    => 'required|integer',
+            'bathrooms'   => 'required|integer',
+            'size'        => 'required|integer',
+            'location'    => 'required|string|max:255',
+            'price'       => 'required|numeric',
             'image'       => 'nullable|image|max:2048',
         ]);
 
@@ -56,11 +61,11 @@ class PropertyController extends Controller
         Property::create([
             'title'       => $request->title,
             'description' => $request->description,
-            'location'    => 'Dhaka',
-            'price'       => 103939,
-            'bathrooms'   => 2,
             'bedrooms'    => $request->bedrooms,
-            'size'        => 1200,
+            'bathrooms'   => $request->bathrooms,
+            'size'        => $request->size,
+            'location'    => $request->location,
+            'price'       => $request->price,
             'owner_id'    => auth()->user()->id,
             'image'       => $imagePath,
         ]);

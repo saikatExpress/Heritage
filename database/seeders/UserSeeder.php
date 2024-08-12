@@ -15,24 +15,24 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Admin User',
-            'email' => 'admin@example.com',
+            'name'     => 'Admin',
+            'email'    => 'admin@gmail.com',
             'password' => Hash::make('password'),
-            'role' => 'admin',
+            'role'     => 'admin',
         ]);
 
         // Property Owner
         User::create([
-            'name' => 'John Doe',
-            'email' => 'owner@example.com',
+            'name'     => 'Saikat Taluker',
+            'email'    => 'saikat@gmail.com',
             'password' => Hash::make('password'),
-            'role' => 'property_owner',
+            'role'     => 'property_owner',
         ]);
 
         // Bidder
         User::create([
-            'name' => 'Jane Smith',
-            'email' => 'bidder@example.com',
+            'name' => 'Saibal Khan',
+            'email' => 'saibal@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'bidder',
         ]);

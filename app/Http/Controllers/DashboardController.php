@@ -16,8 +16,13 @@ class DashboardController extends Controller
     {
         // Get the authenticated user
         $user = Auth::user();
+        $userCount = \App\Models\User::count();
+        // $roleCount = \App\Models\Role::count();
+        // $permissionCount = \App\Models\Permission::count();
+        $bidCount = \App\Models\Bid::count();
+        $propertyCount = \App\Models\Property::count();
 
         // Pass user data to the view if needed
-        return view('dashboard', compact('user'));
+        return view('admin.dashboard', compact('userCount', 'bidCount', 'propertyCount'));
     }
 }
