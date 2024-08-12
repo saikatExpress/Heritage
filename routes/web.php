@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -55,10 +56,18 @@ Route::middleware('auth')->group(function () {
     Route::controller(PropertyController::class)->group(function(){
         Route::get('/properties', 'index')->name('properties.index');
         Route::get('/properties/create', 'create')->name('properties.create');
-        Route::get('/properties/{id}', 'show')->name('properties.show');
+        // Route::get('/properties/{id}', 'show')->name('properties.show');
         Route::post('/properties', 'store')->name('properties.store');
     });
 });
+
+// User Management Routes
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+});
+
 
 // Handle logout request
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');

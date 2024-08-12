@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ $userCount }}</h5>
                     <p class="card-text">Manage all users.</p>
-                    <a href="" class="btn btn-light">View Users</a>
+                    <a href="{{ url('/admin/users') }}" class="btn btn-light">View Users</a>
                 </div>
             </div>
         </div>
