@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Bid;
 use App\Models\Property;
+use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
@@ -15,29 +16,72 @@ class PropertyController extends Controller
      */
     public function index(Request $request)
     {
-        // Get search and filter parameters
+        $role = auth()->user()->role;
+
         $search = $request->input('search');
         $bedrooms = $request->input('bedrooms');
 
-        // Query to get properties
         $properties = Property::query()
-            ->when($search, function ($query, $search) {
+            ->with(['owner']); // Eager load the owner relationship
+
+        if ($role === 'bidder') {
+            // When the user is a bidder, join bids and order by the highest bid
+            $properties = $properties->leftJoin('bids', 'properties.id', '=', 'bids.property_id')
+                ->select('properties.*')
+                ->groupBy('properties.id')
+                ->orderByRaw('MAX(bids.bid_amount) DESC')
+                ->when($search, function ($query, $search) {
+                    return $query->where('properties.title', 'like', "%{$search}%")
+                                ->orWhere('properties.description', 'like', "%{$search}%");
+                })
+                ->when($bedrooms, function ($query, $bedrooms) {
+                    return $query->where('properties.bedrooms', $bedrooms);
+                });
+        } else {
+            $properties = $properties->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%")
-                             ->orWhere('description', 'like', "%{$search}%");
+                            ->orWhere('description', 'like', "%{$search}%");
             })
             ->when($bedrooms, function ($query, $bedrooms) {
                 return $query->where('bedrooms', $bedrooms);
             })
-            ->where('owner_id', auth()->user()->id)
-            ->get();
+            ->where('owner_id', auth()->user()->id);
+        }
 
-        // Return view with properties
+        $properties = $properties->get();
+
         return view('properties.index', ['properties' => $properties]);
     }
 
     public function create()
     {
         return view('properties.create');
+    }
+
+    public function placeBid(Request $request, $propertyId)
+    {
+        $request->validate([
+            'bid_amount' => 'required|numeric|min:0',
+        ]);
+
+        $property = Property::findOrFail($propertyId);
+
+        // Ensure bid is higher than the current highest bid
+        $highestBid = $property->highestBid();
+        $minBid = $highestBid ? $highestBid->bid_amount + 1 : $property->min_bid;
+
+        if ($request->bid_amount < $minBid) {
+            return back()->with('error', 'Your bid must be at least $' . $minBid);
+        }
+
+        // Create the bid
+        Bid::create([
+            'bidder_id' => auth()->id(),
+            'property_id' => $propertyId,
+            'bid_amount' => $request->bid_amount,
+        ]);
+
+        return back()->with('success', 'Bid placed successfully!');
     }
 
     public function store(Request $request)

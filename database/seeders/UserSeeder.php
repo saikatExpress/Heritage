@@ -28,11 +28,41 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'role'     => 'property_owner',
         ]);
+        User::create([
+            'name'     => 'Rahim Taluker',
+            'email'    => 'rahim@gmail.com',
+            'password' => Hash::make('password'),
+            'role'     => 'property_owner',
+        ]);
 
         // Bidder
         User::create([
             'name' => 'Saibal Khan',
             'email' => 'saibal@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'bidder',
+        ]);
+        User::create([
+            'name' => 'Sharif Khan',
+            'email' => 'sharif@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'property_owner',
+        ]);
+        User::create([
+            'name' => 'Kayes Khan',
+            'email' => 'kayes@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'bidder',
+        ]);
+        User::create([
+            'name' => 'Akash Khan',
+            'email' => 'akash@gmail.com',
+            'password' => Hash::make('password'),
+            'role' => 'bidder',
+        ]);
+        User::create([
+            'name' => 'Maruf Khan',
+            'email' => 'maruf@gmail.com',
             'password' => Hash::make('password'),
             'role' => 'bidder',
         ]);

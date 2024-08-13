@@ -31,6 +31,11 @@ class Property extends Model
         return $this->hasMany(Bid::class, 'property_id');
     }
 
+    public function highestBid()
+    {
+        return $this->bids()->orderBy('bid_amount', 'desc')->first();
+    }
+
     public function testimonials()
     {
         return $this->hasMany(Testimonial::class, 'property_id');
