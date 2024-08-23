@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\WithdrawController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\TestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,10 @@ use App\Http\Controllers\Auth\RegisterController;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::controller(TestController::class)->group(function(){
+    Route::post('/system/store', 'store')->name('system.store');
 });
 
 Route::resource('properties', PropertyController::class);
