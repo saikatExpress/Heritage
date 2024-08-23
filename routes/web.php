@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\LoginController;
@@ -38,7 +39,16 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.for
 // Handle login request
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/withdraw/create', [WithdrawController::class, 'createWithdrawRequest'])->name('withdraw.create');
+    Route::post('/withdraw/store', [WithdrawController::class, 'storeWithdrawRequest'])->name('withdraw.store');
+    Route::get('/withdraw/list', [WithdrawController::class, 'listWithdrawRequests'])->name('withdraw.list');
 
+    Route::get('/file/create', [WithdrawController::class, 'createFile'])->name('file.create');
+    Route::post('/file/store', [WithdrawController::class, 'storeFile'])->name('file.store');
+    Route::get('/file/list', [WithdrawController::class, 'listFiles'])->name('file.list');
+    Route::post('/file/approve/{id}', [WithdrawController::class, 'approveFile'])->name('file.approve');
+});
 
 Route::middleware('auth')->group(function () {
     Route::controller(DashboardController::class)->group(function(){

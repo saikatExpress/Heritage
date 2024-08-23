@@ -38,7 +38,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             // Redirect based on user role
-            if ($user->role === 'admin') {
+            if ($user->role === 'admin' || $user->role === 'account') {
                 return Redirect::to('/admin-dashboard');
             } elseif ($user->role === 'bidder') {
                 return Redirect::to('/bidder-dashboard');

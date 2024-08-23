@@ -59,6 +59,8 @@
             <li><a href="">Permissions</a></li>
             <li><a href="">Bids</a></li>
             <li><a href="">Properties</a></li>
+            <li><a href="{{ route('withdraw.list') }}">Withdraw List</a></li>
+            <li><a href="{{ route('withdraw.create') }}">Withdraw Request</a></li>
             <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
         </ul>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

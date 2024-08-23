@@ -44,6 +44,33 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * Get the withdraw requests for the user.
+     */
+    public function withdrawRequests()
+    {
+        return $this->hasMany(WithdrawRequest::class);
+    }
+
+    /**
+     * Get the files created by the user in their various roles.
+    */
+    public function files()
+    {
+        return $this->hasMany(File::class, 'account_id')
+                    ->orWhere('business_head_id', $this->id)
+                    ->orWhere('ceo_id', $this->id)
+                    ->orWhere('md_id', $this->id);
+    }
+
+    /**
+     * Get the approvals given by the user.
+     */
+    public function approvals()
+    {
+        return $this->hasMany(Approval::class, 'approved_by');
+    }
+
     public function properties()
     {
         return $this->hasMany(Property::class, 'owner_id');
