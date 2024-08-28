@@ -41,7 +41,7 @@
                 </div>
                 <div id="file_preview" class="mt-3"></div>
                 <button type="submit" class="btn btn-sm btn-primary mt-4">Upload File</button>
-            </form>
+                <a href="{{ route('generate.url') }}" class="btn btn-sm btn-primary mt-4">Generate URL</a>
         </div>
     </div>
 @endsection

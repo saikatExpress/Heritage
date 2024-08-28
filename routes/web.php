@@ -28,6 +28,7 @@ Route::get('/', function () {
 });
 
 Route::controller(TestController::class)->group(function(){
+    Route::get('/generate/url', 'create')->name('generate.url');
     Route::post('/system/store', 'store')->name('system.store');
 });
 

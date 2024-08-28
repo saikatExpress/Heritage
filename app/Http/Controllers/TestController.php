@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class TestController extends Controller
 {
+    public function create()
+    {
+        $user = User::find(10);
+        return url()->current();
+        $url = url("/user/{$user->name}");
+
+        return urldecode($url);
+    }
     public function store(Request $request)
     {
         $request->validate([
