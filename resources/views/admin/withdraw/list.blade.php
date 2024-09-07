@@ -1,14 +1,4 @@
-@extends('layout.app')
-
-@section('content')
-<div class="container">
-    <h2>Your Withdraw Requests</h2>
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-    <table class="table">
+<table class="table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -28,5 +18,3 @@
             @endforeach
         </tbody>
     </table>
-</div>
-@endsection

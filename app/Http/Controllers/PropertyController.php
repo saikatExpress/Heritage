@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bid;
+use App\Models\User;
 use App\Models\Property;
 use Illuminate\Http\Request;
+use App\Notifications\NewPostNotification;
+use Illuminate\Support\Facades\Notification;
 
 class PropertyController extends Controller
 {
@@ -102,7 +105,7 @@ class PropertyController extends Controller
             $imagePath = $request->file('image')->store('property_images', 'public');
         }
 
-        Property::create([
+        $post = Property::create([
             'title'       => $request->title,
             'description' => $request->description,
             'bedrooms'    => $request->bedrooms,
@@ -113,6 +116,16 @@ class PropertyController extends Controller
             'owner_id'    => auth()->user()->id,
             'image'       => $imagePath,
         ]);
+
+        $users = User::where('id', '!=', auth()->id())->where('role', 'bidder')->get();
+    
+        // Batch size
+        $batchSize = 1000;
+
+        // Process users in batches
+        $users->chunk($batchSize, function ($batch) use ($post) {
+            Notification::send($batch, new NewPostNotification($post));
+        });
 
         return redirect()->route('properties.index')->with('success', 'Property created successfully.');
     }

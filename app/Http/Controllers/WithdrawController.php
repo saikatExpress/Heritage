@@ -15,7 +15,7 @@ class WithdrawController extends Controller
      */
     public function createWithdrawRequest()
     {
-        return view('admin.withdraw.create');
+        return view('admin.withdraw.create')->render();
     }
 
     /**
@@ -47,7 +47,7 @@ class WithdrawController extends Controller
     {
         $withdrawRequests = WithdrawRequest::all();
 
-        return view('admin.withdraw.list', compact('withdrawRequests'));
+        return view('admin.withdraw.list', compact('withdrawRequests'))->render();
     }
 
     /**

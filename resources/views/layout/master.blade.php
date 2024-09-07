@@ -59,8 +59,12 @@
             <li><a href="">Permissions</a></li>
             <li><a href="">Bids</a></li>
             <li><a href="">Properties</a></li>
-            <li><a href="{{ route('withdraw.list') }}">Withdraw List</a></li>
-            <li><a href="{{ route('withdraw.create') }}">Withdraw Request</a></li>
+            <li>
+                <a href="javascript:void();" data-url="{{ route('withdraw.list') }}" class="menuBtn">Withdraw List</a>
+            </li>
+            <li>
+                <a href="javascript:void();" data-url="{{ route('withdraw.create') }}" class="menuBtn">Withdraw Request</a>
+            </li>
             <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
         </ul>
         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -75,6 +79,32 @@
 
     {{-- @include('components.footer') --}}
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('.menuBtn').on('click', function(){
+                const url = $(this).data('url');
+                fetchAndRender(url, '.container');
+            });
+
+            function fetchAndRender(routeName, containerSelector) {
+                var url = routeName; // Adjust URL structure as needed
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        $(containerSelector).html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors here
+                        console.error("AJAX Error: ", status, error);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
